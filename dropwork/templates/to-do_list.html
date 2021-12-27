@@ -1,0 +1,51 @@
+{% extends 'base2.html' %}
+{% load static %}
+<body>
+    {% block content %}
+
+    <div data-spy="scroll"  data-offset="0">
+        <div class="card col-md-9 mx-auto my-3 bg-light">
+            <img class="col-md-12 mx-auto my-3 bg-light img-responsive fit-image" src="{% static 'images/negative-homework.jpg' %}">
+            <h4 class="card-header text-center text-info border border-info my-2">To-Do Assignments</h4>
+            <div class="card-body">
+            {% if todo_list %}
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">File</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for assign in todo_list %}
+                    <tr>
+                        
+                        <td>{{assign.title}}</td>
+                        <td>{{assign.Description}}</td>
+                        <td>{{assign.subject}}</td>
+                        <td>{{assign.end_date}}</td>
+                        <td>{{assign.total_points}}</td>
+                        <td><a href= "{{assign.file_url.url}}" role="button" class="btn btn-success">View</a></td>
+                        
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+            <div class="alert alert-success mx-2 my-2" role="alert">
+                This is no any to do assignments...
+            </div>
+            {% endif %}
+            </div>
+          </div>
+    
+      </div>
+
+    {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

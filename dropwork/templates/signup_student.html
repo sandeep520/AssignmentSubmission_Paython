@@ -1,0 +1,76 @@
+
+{% extends 'base.html' %}
+{% load static %}
+<body>
+    {% block content %}
+    <div data-spy="scroll"  data-offset="0">
+    <div class="main">
+
+        <!-- Sign up form -->
+        <div class="card shadow col-md-8 mx-auto my-5 bg-white border-light pb-4" >
+            <div class="row">
+                <div class="col-md-6 mx-auto my-5">
+                    <figure><img src="{% static 'images/signup-image.jpg' %}" style="height: 400px;" alt="sing up image"></figure>
+
+                </div>
+                <div class="signin-image col-md-6">
+                    <h2 class="form-title text-info my-4 ">Student Registration</h2>
+                        <form method="POST" class="register-form" id="register-form">
+                            {% csrf_token %}
+                            <div class="form-group input-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name form-control border-white" style="color: #01adaa;"></i></label>
+                                <input type="text" class="form-control border-info col-md-10 bg-white" name="firstname" id="firstname" placeholder="First Name" required/>
+                            </div>
+                            <div class="form-group input-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name form-control border-white" style="color: #01adaa;"></i></label>
+                                <input type="text" class="form-control border-info col-md-10" name="lastname" id="lastname" placeholder="Last Name" required/>
+                            </div>
+                            <div class="form-group input-group">
+                                <label for="email"><i class="zmdi zmdi-email material-icons-name form-control border-white" style="color: #01adaa;"></i></label>
+                                <input type="email" class="form-control border-info col-md-10 mr-4 ml-0" name="email" id="email" placeholder="Your Email" required/>
+                            </div>
+                            <div class="form-group input-group">
+                                <label for="pass"><i class="zmdi zmdi-lock form-control border-white" style="color: #01adaa;"></i></label>
+                                <input type="password" class="form-control border-info col-md-10" name="pass" id="pass" placeholder="Password" required/>
+                            </div>
+
+                            <div class="form-group input-group">
+                                
+                                <label for="pass" class="form-control col-md-1 border-white" style="color: #01adaa;">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book-half" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M8.5 2.687v9.746c.935-.53 2.12-.603 3.213-.493 1.18.12 2.37.461 3.287.811V2.828c-.885-.37-2.154-.769-3.388-.893-1.33-.134-2.458.063-3.112.752zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                                    </svg>
+                                </label>
+                                <select name="courses" id="courses" class="form-control border-info col-md-10 mx-1" required>
+                                    {% for course in courses %}
+                                
+                                            <option value="{{course.id}}">{{course.course}}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-group input-group mt-4">
+                                    <label for="name" class="form-control col-md-1 border-white" style="color: #01adaa;">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-medical-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM8.5 4.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L7 6l-.549.317a.5.5 0 1 0 .5.866l.549-.317V7.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L9 6l.549-.317a.5.5 0 1 0-.5-.866l-.549.317V4.5zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/>
+                                        </svg>
+                                    </label>
+                                    <input type="text" class="form-control border-info col-md-10 ml-1" name="rollno" id="rollno" placeholder="Roll Number" pattern="[0-9]*"  maxlength="3" required oninvalid="this.setCustomValidity('Please enter roll number')"/>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="btn btn-info mx-1" value="Register"/>
+                            </div>
+                        </form>
+                        <a href="" class="text-info mx-1"><b>I am already member</b></a>
+
+                </div>
+                        
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endblock %}
+    
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

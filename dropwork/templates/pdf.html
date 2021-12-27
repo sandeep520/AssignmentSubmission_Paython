@@ -1,0 +1,188 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Student Report</title>
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        .card-header{
+            font-size: 1.4em;
+        }
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 5px;
+            background-color: #fff;
+        }
+
+        .table th,
+        .table td {
+            padding: 5px;
+            vertical-align: top;
+            border-top: 1px solid #000;
+            text-align: center;
+            font-size: 1.3em;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #000;
+            font-size: 1.3em;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #000;
+            font-size: 1.3em;
+        }
+
+        .table .table {
+            background-color: #fff;
+        }
+
+        .list-group {
+            display: block;
+            width: 100%;
+            list-style: none;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .list-group p {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            list-style: none;
+            font-size: 1.3em;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card mx-auto mt-2" style="width: 80%;">
+            
+        <div class="row my-2">
+            <div class="card-header">
+                <h2 style="color: #079399;">Student Details :</h2>
+            </div>
+            <div class="list-group">
+                <p><b>Name:</b> {{ student.first_name }} {{ student.last_name }}</p>
+                <p><b>Roll Number:</b> {{ student.roll_no }}</p>
+                <p><b>Email:</b> {{ student.email }} </p>
+                <p><b>Course:</b> {{ student.course }}</p>
+            </div>
+            <div class="card-header">
+                <h2 style="color: #079399;">Assignment Report :</h2>
+            </div>
+            <div class="list-group">
+                <p><b>Total :</b> {{reports.0}} Assignments</p>
+                <p><b>Completed :</b> {{reports.1}} Assignments</p>
+                <p><b>Uploaded  :</b> {{reports.2}} Assignments </p>
+                <p><b>Remaining :</b> {{reports.3}} Assignments</p>
+            </div>
+            
+        </div>
+        <div class="card-header">
+            <h2 style="color: #079399;">Completed Assignments :</h2>
+        </div>
+        {% if completed %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Total Points</th>
+                <th>Staus</th>
+                <th>Received Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for assign in completed %}
+                <tr>
+                    <td>{{assign.que_ass_id.title}}</td>
+                    <td>{{assign.que_ass_id.total_points}}</td>
+                    <td>{{assign.done_status}}</td>
+                    <td>{{assign.marks}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="card-header">
+            <p><b>there is no any completed assignments.</b></p>
+        </div>
+        {% endif %}
+
+        <div class="card-header">
+            <h2 style="color: #079399;">Uploaded Assignments :</h2>
+        </div>
+        {% if uploaded %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Total Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for assign in uploaded %}
+                <tr>
+                    <td>{{assign.que_ass_id.title}}</td>
+                    <td>{{assign.que_ass_id.total_points}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="card-header">
+            <p><b>there is no any uploaded assignments.</b></p>
+        </div>
+        {% endif %}
+
+        <div class="card-header">
+            <h2 style="color: #079399;">Remaining Assignments :</h2>
+        </div>
+        {% if remaining %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Total Points</th>
+                <th>Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for assign in remaining %}
+                <tr>
+                    <td>{{assign.title}}</td>
+                    <td>{{assign.total_points}}</td>
+                    <td>{{assign.end_date}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="card-header">
+            <p><b>there is no any remaining assignments.</b></p>
+        </div>
+        {% endif %}
+        </div>
+        <div class="card-header" style="margin-top:100px;">
+            <h2 style="color: #079399;">Total Received Marks : {{total_marks.1}} / {{total_marks.0}}</h2>
+        </div>
+        
+    </div>
+    {% if msg%}
+    <div class="alert alert-danger mx-auto" role="alert" style="width: 80%;">
+        {{msg}}
+    </div>
+    {% endif %}
+</div>
+
+
+</body>
+</html>

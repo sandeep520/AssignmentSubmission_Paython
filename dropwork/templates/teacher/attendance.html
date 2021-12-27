@@ -1,0 +1,63 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+<body>
+    {% block content %}
+
+    <div data-spy="scroll"  data-offset="0">
+        <div class="card shadow-sm row mx-3" style="height: 220px;">
+          
+            <div class="mt-4 border border-white rounded" style="width: 25%;">
+              <h4 style="color: #044736 ;" class="ml-3"><b>Attendance</b></h4>
+             </div>  
+
+             
+             <div class=" bg-white" style="width: 73%; height: 100%;">
+                <img class="mx-auto bg-light img-responsive fit-image d-flex justify-content-center" style="height: 100%; width: 60%; " src="{% static 'images/homework8.png' %}">
+            </div>
+        </div>
+    
+
+
+    <form class="register-form px-3 py-3" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+            <select name="subject" id="subject" class="form-control border-info col-md-10 mx-1" required>
+              {% for sub in subjects %}
+                      <option value="{{sub.id}}">{{sub.sub_name}}</option>
+              {% endfor %}
+            </select>
+            <div class="form-group form-row">
+              <div class="form-group col-md-6">
+                  <label for="startDate" class="text-info"><b>Date</b></label>
+                  <input type="datetime-local" class="form-control" id="startDate" name = "startDate"  required/>
+              </div>
+
+            <div class="col-lg-9 my-1">
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope='col'>Roll. No.</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Present/Absent</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for st in students %}
+              <tr>
+                <th scope="row">{{st.roll_no}}</th>
+                <td>{{st.first_name}}</td>
+                <td>{{st.last_name}}</td>
+                <td><input type="radio" name="{{st.first_name}}" value="1">Yes &nbsp;&nbsp;&nbsp;
+                <input type="radio" name="{{st.first_name}}" value="0">No</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-group form-button">
+              <button type="submit" class="btn btn-info my-3">Upload</button>
+        </div>
+      </div>
+        </form>
+    {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->

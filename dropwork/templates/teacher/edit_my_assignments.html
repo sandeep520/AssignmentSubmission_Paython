@@ -1,0 +1,61 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+<body>
+    {% block content %}
+<div data-spy="scroll"  data-offset="0">   
+    
+    <div class="container-fluid">
+        <div class="card shadow mx-auto my-3"  style="width: 70%;">
+            <div class="card-header mx-auto" style="width: 100%;">
+                <h3 class="text-info text-center my-1">Edit Assignment</h3>
+            </div>
+            <div class="card-body" >
+                <form class="register-form px-3 py-3" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="inputAddress" class="text-info"><b>Assignment Title</b></label>
+                      <input type="text" class="form-control" id="title" name="title" value="{{assign.title}}" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputAddress2" class="text-info"><b>Description</b></label>
+                      <input type="text" class="form-control" id="description" name = "description" value="{{assign.Description}}" required>
+                    </div>
+                    <div class="form-group form-row">
+                      <div class="form-group col-md-6">
+                          <label for="startDate" class="text-info"><b>Start Date</b></label>
+                          <input type="datetime-local" class="form-control" id="startDate" name = "startDate"   required/>
+                      </div>
+                     
+                      <div class="form-group col-md-6">
+                        <label for="startDate" class="text-info"><b>End Date</b></label>
+                        <input type="datetime-local" class="form-control" id="endDate" name = "endDate"  required/>
+                      </div>
+                      
+                    </div>
+                    <div class="form-group form-row">
+                        <label for="inputState" class="text-info"><b>Total Points</b></label>
+                        <input type="number" max="100" min="0" class="form-control" id="points" name = "points" value="{{assign.total_points}}"  required/>
+                    </div>
+                    <label for="file" class="text-info"><b>File</b></label>
+                    <div class="form-group">
+                      <div class="custom-file">
+                       <input type="file" class="custom-file-input" id="file_url" name="file_url"  required>
+                       <label class="custom-file-label" for="validatedCustomFile">Choose File...</label>
+                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                      </div>
+                    </div>
+                    <div class="form-group form-button">
+                      <button type="submit" class="btn btn-info my-3">Save Changes</button>
+                    </div>
+                  </form>
+                  
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>

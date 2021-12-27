@@ -1,0 +1,67 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+<body>
+{% block content %}
+
+<div class="col-sm-11.7 mx-3 my-2">
+  <div class="card col-md-11 mx-auto my-3 bg-light">
+    <img class="col-md-7 mx-auto my-1 bg-light img-responsive fit-image" style="height: 30%; width: 40%;" src="{% static 'images/classmates2.png' %}">
+    
+    {% if students %}
+    <h4 class="card-header text-center text-info border border-info my-2">Students of {{course_name}}</h4>
+    {% else %}
+    <h4 class="card-header text-center text-info border border-info my-2">Student List</h4>
+    {% endif %}
+  
+    <div class="row content">
+        <div class="col-lg-2 mb-2">
+      
+          <div class="list-group my-2">
+              <a href="#" class="list-group-item list-group-item-action bg-info text-white">
+                <h5>Courses</h5>
+              </a>
+          </div>
+          {% for course in courses %}
+          
+          <div class="list-group">
+              <a href="/all_students/?course={{course}}" class="list-group-item list-group-item-action  my-1">
+                  {{course}}
+              </a>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <div class="col-lg-10 my-2 ">
+            {% if students %}
+            <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Sr No.</th>
+                    <th scope="col">Roll No</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for st in students %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{st.roll_no}}</td>
+                    <td>{{st.first_name}}</td>
+                    <td>{{st.last_name}}</td>
+                    <td>{{st.email}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% endif %}
+    
+        </div>
+    </div>     
+</div>
+
+
+{% endblock %}
+
+</body>

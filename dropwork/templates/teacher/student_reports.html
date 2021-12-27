@@ -1,0 +1,266 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+
+{% block styles %}
+@page {
+    size: {{ pagesize }};
+    margin: 1cm;
+    @frame footer {
+        -pdf-frame-content: footerContent;
+        bottom: 0cm;
+        margin-left: 9cm;
+        margin-right: 9cm;
+        height: 1cm;
+    }
+}
+{% endblock %}
+<body>
+{% block content %}
+    <div data-spy="scroll"  data-offset="0">
+
+        <div class="card shadow-sm row mx-auto" style="height: 280px; width: 80%;">
+            <div class="mt-3 border border-white rounded" style="width: 32%;">
+                <h4 style="color: #044736 ;" class="ml-3"><b>Student Report</b></h4>
+                <form method="GET" class="register-form mx-3" id="register-form">
+                    
+                    <div class="form-group">
+                        <label for="name" class="text-info"><b>Enter Student Roll Number</b></label>
+                        <input type="text" class="form-control border-info col-md-10 bg-white" name="rollno" id="rollno" placeholder="Enter student roll no" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="text-info"><b>Select Subject</b></label>
+                        <select class="form-control border-info col-md-10 bg-white" id="subject" name = "subject" required>
+                        {% for sub in subjects %}
+                            <option value="{{sub.id}}">{{sub.sub_name}} {{sub.course}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group form-button mt-2">
+                        <button type="submit" class="btn btn-info">Go</button>
+                    </div>
+                </form>
+            </div>  
+            <div class=" bg-white" style="width: 65%; height: 100%;">
+                <img class="mx-auto bg-light img-responsive fit-image d-flex justify-content-center" style="height: 100%; width: 70%; " src="{% static 'images/homework8.png' %}">
+            </div>
+        </div>
+        <div class="mx-auto mt-2" style="width: 80%;">
+            <h4 class="card-header text-center text-info border border-info mb-2 ">Student Report</h4>
+        </div>
+
+        {% if student %}
+        <div class="card mx-auto mt-2" style="width: 80%;">
+            <a class="btn btn-outline-info col-md-2 mx-auto my-2" role="button" href="/render/pdf/?rollno={{student.roll_no}}&subject={{sub_id}}">Export Pdf</a>
+            <div class="row my-2">
+                <div class="mx-auto pb-2" style="width: 40%;">
+                    <h5 class="card-header text-info text-center border-info my-2 bg-white"><b>Student Details</b></h5>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Name : </h5><h5 class="mx-2"> {{student.first_name}} {{student.last_name}}</h5></div>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Roll No : </h5><h5 class="mx-2"> {{student.roll_no}}</h5></div>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Email : </h5><h5 class="mx-2"> {{student.email}}</h5></div>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Course : </h5><h5 class="mx-2"> {{student.course}}</h5></div>
+                
+                </div>
+                <div class="mx-auto" style="width: 40%;">
+                    <h5 class="card-header text-info text-center border-info my-2 bg-white"><b>Assignment Report</b></h5>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Total : </h5><h5 class="mx-2"> {{reports.0}} Assignments</h5></div>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Completed : </h5><h5 class="mx-2"> {{reports.1}} Assignments</h5></div>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Uploaded  : </h5><h5 class="mx-2"> {{reports.2}} Assignments</h5></div>
+                    <div class="row mt-2 mx-3"><h5 class="text-info">Remaining : </h5><h5 class="mx-2"> {{reports.3}} Assignments</h5></div>
+                    
+                </div>
+            </div>
+            <div class="row my-2 mx-2">
+                <div class=" mx-auto pb-2 " style="width: 30%;">
+                    <h4 class="card-header text-center text-info border border-info mb-2">Completed Assignments</h4>
+                    {% if completed %}
+                    <table class="table">
+                        <thead class="thead-light" >
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for assign in completed %}
+                        <tr>
+                            <td>{{assign.que_ass_id.title}}</td>
+                            <td>{{assign.que_ass_id.total_points}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-danger my-2" role="alert">
+                        There is no any completed assignments...
+                    </div>
+                    {% endif %}
+                </div>
+                <div class=" mx-auto " style="width: 30%;">
+                    <h4 class="card-header text-center text-info border border-info mb-2">Uploaded Assignments</h4>
+                    {% if uploaded %}
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for assign in uploaded %}
+                        <tr>
+                            <td>{{assign.que_ass_id.title}}</td>
+                            <td>{{assign.que_ass_id.total_points}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-warning my-2" role="alert">
+                        There is no any uploaded assignments...
+                    </div>
+                    {% endif %}
+                </div>
+                <div class=" mx-auto " style="width: 30%;">
+                    <h4 class="card-header text-center text-info border border-info mb-2">Remaining Assignments</h4>
+                    {% if remaining %}
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for assign in remaining %}
+                        <tr>
+                            <td>{{assign.title}}</td>
+                            <td>{{assign.total_points}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-success my-2" role="alert">
+                        There is no any remaining assignments...
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row my-2 mx-2 mr-2 ">
+                <div class="card mx-2 my-2 shadow-sm" style="width: 58%;">
+                    <div class="card-body">
+                        <h5 class="card-header text-info text-center border-info bg-white"><b>Received Marks</b></h5>
+                        <canvas id="myBarChart" class="mt-2" height="65%" width="100%"></canvas>
+                        <div class="col-md-12 mt-3">
+                            <h5 class="text-center text-info">Total Received Marks : {{total_marks.1}} / {{total_marks.0}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mx-2 my-2 shadow-sm" style="width: 38%;">
+                    <div class="card-body">
+                        <h5 class="card-header text-info text-center border-info bg-white"><b>Assignments</b></h5>
+                        <canvas id="myPieChart" class="mt-2" height="100%" width="100%"></canvas>
+                        <div class="col-md-12 mt-4">
+                            <h5 class="text-center text-info">Total Assignments : {{reports.0}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% elif msg%}
+        <div class="alert alert-danger mx-auto" role="alert" style="width: 80%;">
+            {{msg}}
+        </div>
+        {% endif %}
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+
+    <script>
+        var ctx = document.getElementById('myBarChart').getContext('2d');
+        var marks = JSON.parse("{{marks|escapejs}}");
+        var assigns = JSON.parse("{{assigns|escapejs}}");
+        var chart = new Chart(ctx, {
+        // The type of chart we want to create
+            type: 'bar',
+
+        // The data for our dataset
+            data: {
+                
+                labels: assigns,
+                
+                datasets: [{
+                label: 'Received Marks',
+                backgroundColor: ['rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)'],
+                borderColor: ['rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)'],
+                data: marks,
+                borderWidth: 1
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                    beginAtZero: true
+                    }
+                }]
+            }
+        }
+        });
+
+        //Pie chart js
+        var ctx2 = document.getElementById('myPieChart').getContext('2d');
+        var reports = JSON.parse("{{js_reports|escapejs}}");
+        
+        var chart = new Chart(ctx2, {
+        // The type of chart we want to create
+            type: 'doughnut',
+
+        // The data for our dataset
+            data: {
+                
+                labels: ['Completed Assignments','Uploaded Assignments', 'Remaining Assignments'],
+                
+                datasets: [{
+                label: 'All Assignments Status',
+                backgroundColor: ['rgb(0,153,0,0.5)','rgb(255,0,0,0.5)','rgb(51,0,102,0.5)'],
+                borderColor: ['rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)'],
+                data: reports,
+                borderWidth: 1
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            
+                tooltips: {
+                enabled: true
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx2) => {
+    
+                        let sum = reports[0] + reports[1] + reports[2];
+                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                        return percentage;
+    
+    
+                    },
+                    color: '#fff',
+                }
+            }
+        }
+        });
+
+    </script>
+
+{% endblock %}
+    
+</body>
+</html>

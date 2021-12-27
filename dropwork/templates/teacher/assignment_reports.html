@@ -1,0 +1,208 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+<body>
+{% block content %}
+    <div data-spy="scroll"  data-offset="0">
+        <div class="card shadow-sm row mx-3" style="height: 220px;">
+          
+            <div class="mt-4 border border-white rounded" style="width: 25%;">
+              <h4 style="color: #044736 ;" class="ml-3"><b>Assignment Report</b></h4>
+                <form class="register-form pl-3 pt-2" method="POST" style="margin-top: 30px;">
+                    {% csrf_token %}
+                    <label class="form-group text-info" for="inputState"><b>Select Subject</b></label>
+                    <div class="form-group form-row">
+                        <div class="form-group col-md-9">
+                    
+                        <select class="form-control" id="subject" name = "subject">
+                        {% for sub in subjects %}
+                            <option value="{{sub.id}}">{{sub.sub_name}}</option>
+                        {% endfor %}
+                        </select>
+                        </div>
+                        <div class="form-group form-button">
+                            <button type="submit" class="btn btn-info">Go</button>
+                        </div>
+                
+                    </div>    
+                </form>
+             </div>  
+             <div class=" bg-white" style="width: 73%; height: 100%;">
+                <img class="mx-auto bg-light img-responsive fit-image d-flex justify-content-center" style="height: 100%; width: 60%; " src="{% static 'images/homework8.png' %}">
+            </div>
+        </div>
+        
+    {% if assignments %}
+    
+    <div class="col-sm-11.7 mx-3 my-2">
+        <div class="row content">
+            <div class="col-lg-3">
+          
+              <div class="list-group my-2 ">
+                  <a href="#" class="list-group-item list-group-item-action bg-info text-white">
+                    Assignments
+                  </a>
+              </div>
+              {% for assign in assignments %}
+              
+              <div class="list-group">
+                  <a href="/assignment_reports/?assign={{assign.id}}" class="list-group-item list-group-item-action  my-1">
+                      {{assign.title}}
+                  </a>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="col-lg-9 my-2 ">
+                {% if assign_obj %}
+                <h4 class="card-header text-center text-info border border-info mb-2">Assignment Report for {{assign_obj.title}}</h4>
+                {% else %}
+                <h4 class="card-header text-center text-info border border-info mb-2">Assignment Report</h4>
+                {% endif %}
+                {% if assign_obj %}
+                <div class="row my-2">
+                    <div class="card shadow-sm  mx-auto pb-2" style="width: 46.5%;">
+                        <h5 class="text-info text-center my-2"><b>Assignment Details</b></h5>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">Description : </h5><h5 class="mx-2"> {{assign_obj.Description}}</h5></div>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">Total Points : </h5><h5 class="mx-2"> {{assign_obj.total_points}}</h5></div>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">File : </h5><a class="text-dark" href="{{assign_obj.file_url.url}}"><h5 class="mx-2"> {{assign_obj.file_url}}</a></h5></div>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">Due Date : </h5><h5 class="mx-2"> {{assign_obj.end_date}}</h5></div>
+                    
+                    </div>
+                    <div class="card shadow-sm mx-auto" style="width: 46.5%;">
+                        <h5 class="text-info text-center my-2"><b>Report</b></h5>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">Completed : </h5><h5 class="mx-2"> {{reports.0}} students</h5></div>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">Uploaded  : </h5><h5 class="mx-2"> {{reports.1}} students</h5></div>
+                        <div class="row mt-2 mx-3"><h5 class="text-info">Remaining : </h5><h5 class="mx-2"> {{reports.2}} students</h5></div>
+                        
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if assign_obj %}
+                <div class="card shadow-sm px-2 py-2 my-2">
+                    {% if assign_obj %}
+                    <h4 class="card-header text-center text-info border border-info mb-2">Student List of Completed Assignment</h4>
+                    {% if completed %}
+                    <table class="table">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Sr.</th>
+                            <th scope="col">Roll No</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Marks</th>   
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for st in completed %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{st.st_id.roll_no}}</td>
+                            <td>{{st.st_id.first_name}}</td>
+                            <td>{{st.st_id.last_name}}</td>
+                            <td>{{st.marks}}</td>
+                            
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                        <div class="alert alert-dark" role="alert">
+                            There is no any data.
+                        </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if assign_obj %}
+                <div class="card shadow-sm px-2 py-2 my-2">
+                    {% if assign_obj %}
+                    <h4 class="card-header text-center text-info border border-info mb-2">Student List of Uploaded Assignment</h4>
+                    <div class="alert alert-primary" role="alert">
+                        This table shows list of students who are uploaded their solutions but you are not assigned marks to them.
+                    </div>
+                    {% if uploaded %}
+                    <table class="table">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Sr.</th>
+                            <th scope="col">Roll No</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Marks</th>   
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for st in uploaded %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{st.st_id.roll_no}}</td>
+                            <td>{{st.st_id.first_name}}</td>
+                            <td>{{st.st_id.last_name}}</td>
+                            <td>-</td>
+                            
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    {% else %}
+                        <div class="alert alert-dark" role="alert">
+                            There is no any data.
+                        </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% if assign_obj %}
+                <div class="card shadow-sm px-2 py-2 my-2">
+                    {% if assign_obj %}
+                    <h4 class="card-header text-center text-info border border-info mb-2">Student List of Remaining Assignment</h4>
+                    {% if remaining %}
+                    <table class="table">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Sr.</th>
+                            <th scope="col">Roll No</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Marks</th>   
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for st in remaining %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{st.st_id.roll_no}}</td>
+                            <td>{{st.st_id.first_name}}</td>
+                            <td>{{st.st_id.last_name}}</td>
+                            <td>-</td>
+                            
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    {% else %}
+                        <div class="alert alert-dark" role="alert">
+                            There is no any data.
+                        </div>
+                    {% endif %}
+
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            
+    </div>   
+    {% endif %}
+    {% if msg %}
+    <div class="alert alert-warning col-md-8 mx-auto my-3" role="alert">
+      {{msg}}
+    </div>
+    {% endif %}
+    </div>
+{% endblock %}
+    
+</body>
+</html>

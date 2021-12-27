@@ -1,0 +1,128 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+<body>
+{% block content %}
+  <div data-spy="scroll"  data-offset="0">
+    <div class="card shadow-sm row mx-3" style="height: 220px;">
+      <div class="mt-4 border border-white rounded" style="width: 25%;">
+
+          <form class="register-form pl-3 pt-2" method="POST" style="margin-top: 30px;">
+              {% csrf_token %}
+              <label class="form-group text-info" for="inputState"><b>Select Subject</b></label>
+              <div class="form-group form-row">
+                  <div class="form-group col-md-9">
+              
+                  <select class="form-control" id="subject" name = "subject">
+                  {% for sub in subjects %}
+                      <option value="{{sub.id}}">{{sub.sub_name}}</option>
+                  {% endfor %}
+                  </select>
+                  </div>
+                  <div class="form-group form-button">
+                      <button type="submit" class="btn btn-info">Go</button>
+                  </div>
+          
+              </div>    
+          </form>
+      </div>  
+      <div class=" bg-white" style="width: 73%; height: 100%;">
+          <img class="mx-auto bg-light img-responsive fit-image d-flex justify-content-center" style="height: 100%; width: 60%; " src="{% static 'images/homework8.png' %}">
+      </div>
+    </div>
+    
+     {% if assignments %}
+    
+    <div class="col-sm-11.7 mx-4 my-2">
+        <div class="row content">
+            <div class="mx-2" style="width: 20%;">
+          
+              <div class="list-group my-2">
+                  <a href="#" class="list-group-item list-group-item-action bg-info text-white">
+                    Assignments
+                  </a>
+              </div>
+
+              {% for assign in assignments %}
+              
+              <div class="list-group">
+                  <a href="/view_solution/?assign={{assign.id}}" class="list-group-item list-group-item-action  my-1">
+                      {{assign.title}}
+                  </a>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="my-2 mx-1" style="width: 78%;">
+              {% if solutions %}
+              <h4 class="card-header text-center text-info border border-info mb-2">Solutions of {{solutions.0.que_ass_id.title}}</h4>
+              {% else %}
+              <h4 class="card-header text-center text-info border border-info mb-2">Solutions</h4>
+              {% endif %}
+              {% if solutions %}
+                <table class="table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">Roll No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Submit Date</th>
+                        <th scope="col">Solution</th>
+                        <th scope="col">Accept</th>
+                        <th scope="col">Assign Marks</th>
+                        <th scope="col">Total Marks</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for solu in solutions %}
+                      <tr>
+                        <td>{{solu.st_id.roll_no}}</th>
+                        <td>{{solu.st_id.first_name}} {{solu.st_id.last_name}}</th>
+                        <td>{{solu.submit_date}}</td>
+                        <td><a href= "{{solu.ans_url.url}}" role="button" class="btn btn-info">View</a></td>
+                        {% if solu.status %}
+                        <td><button type="button" class="btn btn-danger" disabled>Reject</button></td>
+                        <td><button type="button" class="btn btn-success" disabled>Assigned</button> 
+                        </td>
+                        <td>{{solu.que_ass_id.total_points}}</td>
+                        {% if solu.done_status == 'In Time' %}
+                          <td class="text-success"><b>{{solu.done_status}}</b></td>
+                        {% else %}
+                          <td class="text-danger"><b>{{solu.done_status}}</b></td>
+                        {% endif %}
+                        {% else %}
+                        <td><a href= "/reject_solution/?solu={{solu.id}}" role="button" class="btn btn-danger">Reject</a></td>
+                        <td> 
+                          <form class="register-form" method="GET">
+                          <div class="input-group form-group mb-0">
+                            <input class="form-control" style="display: none;" id="solu_id" name="solu_id" value="{{solu.id}}">
+                            <input type="number" min="0" max="{{solu.que_ass_id.total_points}}" class="form-control" name="marks" id="marks" required>
+                            <div class="input-group-prepend form-group">
+                              <button class="btn btn-success rounded" type="submit">Submit</button>
+                            </div>
+                          </div>
+                          </td>
+                          </form>
+                        </td>
+                        <td>{{solu.que_ass_id.total_points}}</td>
+                        <td>{{solu.done_status}}</td>
+                        {% endif %}
+                        
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            
+    </div>
+    {% endif %}
+    
+    {% if msg %}
+    <div class="alert alert-warning col-md-8 mx-auto my-3" role="alert">
+      {{msg}}
+    </div>
+    {% endif %}
+  </div>
+
+{% endblock %}
+
+</body>

@@ -1,0 +1,147 @@
+{% extends 'base2.html' %}
+{% load static %}
+<body>
+    {% block content %}
+<div data-spy="scroll"  data-offset="0">   
+    
+<div class="container-fluid">
+    <div class="row content">
+      <div class="mx-2" style="width: 19%;">
+    
+        <div class="list-group my-1">
+            <a href="#" class="list-group-item list-group-item-action bg-info text-white" style="font-size: large;">
+                Subjects
+            </a>
+            <a href="/upload_solution" class="list-group-item list-group-item-action mt-2  bg-white border">
+              All 
+            </a>
+        </div>
+        {% for sub in subjects %}
+        
+        <div class="list-group">
+            <a href="/upload_solution/?subject={{sub.id}}" class="list-group-item list-group-item-action  my-1">
+                {{sub.sub_name}}
+            </a>
+        </div>
+        {% endfor %}
+      </div>
+  
+      <div class="card shadow-sm mt-1  mx-1 py-1 px-2" style="width: 79%;">
+        <h4 class="card-header text-center text-info border border-info mb-2 mt-1">Upload Solution</h4>
+        {% if messages %}
+          {% for message in messages %}
+              <div class="alert alert-success mx-2" role="alert">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+        <table class="table  my-1">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Points</th>
+                <th scope="col">File</th>
+                <th scope="col">Solution</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+              {% for assign in assignments %}
+              
+              {% if assign.id in solution_status %}
+              <tr>
+                <td>{{assign.title}}</td>
+                <td>{{assign.Description}}</td>
+                <td>{{assign.subject.sub_name}}</td>
+                <td>{{assign.end_date}}</td>
+                <td>{{assign.total_points}}</td>
+                <td><a href= "{{assign.file_url.url}}"role="button" class="btn btn-info">View</a></td>
+                <td>
+                  <button type="button" class="btn btn-success px-4" disabled>Done</button>
+                </td>
+              </tr>
+              {% elif assign.id in solutions %}
+              <tr>
+                <td>{{assign.title}}</td>
+                <td>{{assign.Description}}</td>
+                <td>{{assign.subject.sub_name}}</td>
+                <td>{{assign.end_date}}</td>
+                <td>{{assign.total_points}}</td>
+                <td><a href= "{{assign.file_url.url}}" role="button" class="btn btn-info">View</a></td>
+                <td>
+                  <button type="button" class="btn btn-info" disabled>Uploaded</button>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td>{{assign.title}}</td>
+                <td>{{assign.Description}}</td>
+                <td>{{assign.subject.sub_name}}</td>
+                <td>{{assign.end_date}}</td>
+                <td>{{assign.total_points}}</td>
+                <td><a href= "{{assign.file_url.url}}"role="button" class="btn btn-info">View</a></td>
+                <td>
+                  <a class="btn btn-outline-info" onclick="myFunction()" href="/upload_solution/?subject={{assign.subject.id}}&assign={{assign.id}}" >Upload</a>
+
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if assign_obj %}
+        <div id="myDIV" >
+          <div class="col-sm-7 mx-auto my-3 border border-info rounded">
+      
+            <form class="register-form px-3 py-2" method="POST"  enctype="multipart/form-data">
+              {% csrf_token %}
+              
+              <div class="form-group">
+                {% if assign_obj %}
+                <label for="inputState" class="text-info mt-2"><b><h5>Solution for {{assign_obj.title}}</h5></b></label>
+                {% endif %}
+              </div>
+              <label for="file" class="text-info"><b>File</b></label>
+              <div class="form-group">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="uploadFile" name="uploadFile"  required>
+                  <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        
+                </div>
+              </div>
+              <div class="form-group form-button">
+                <button type="submit" class="btn btn-info my-1">Upload</button>
+              </div>
+            </form>
+      
+          </div>
+        </div>
+        {% endif %}
+        
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <script>
+    function myFunction() {
+      var x = document.getElementById("myDIV");
+      if (x.style.display == "none"){
+        x.style.display = "block";
+      }
+    }
+      $('#uploadfile').on('change',function(){
+          //get the file name
+          var fileName = $(this).val();
+          //replace the "Choose a file" label
+          $(this).next('.custom-file-label').html(fileName);
+      })
+  </script>
+
+    {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

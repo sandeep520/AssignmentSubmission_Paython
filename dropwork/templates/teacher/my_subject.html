@@ -1,0 +1,48 @@
+{% extends 'teacher/base_teacher.html' %}
+{% load static %}
+<body>
+    {% block content %}
+
+    <div data-spy="scroll"  data-offset="0">
+        <div class="card col-md-9 mx-auto my-3 bg-white">
+            <img class="col-md-12 mx-auto my-3 bg-white img-responsive " style="height: 40%;width: 55%;" src="{% static 'images/teacher_work2.png' %}">
+            <h4 class="card-header text-center text-info border border-info my-2">My Subjects</h4>
+            <div class="card-body">
+                {% if subjects %}
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Sr No.</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Credit</th>
+                        <th scope="col">Teacher</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for sub in subjects %}
+                    <tr>
+                        
+                        <td>{{forloop.counter}}</th>
+                        <td>{{sub.sub_name}}</td>
+                        <td>{{sub.course.course}}</td>
+                        <td>{{sub.credit}}</td>
+                        <td>{{sub.assign_teacher.first_name}} {{sub.assign_teacher.last_name}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <div class="alert alert-warning" role="alert">
+                        No any subject assigned to you. Please contact administrator...
+                    </div>
+                {% endif %}
+            </div>
+          </div>
+    
+      </div>
+
+
+    {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->

@@ -1,0 +1,98 @@
+{% extends 'base2.html' %}
+{% load static %}
+<body>
+    {% block content %}
+    <div data-spy="scroll"  data-offset="0">   
+      
+    <div class="container-fluid">
+        <div class="row content">
+        <div class="mx-2" style="width: 17%;">
+            
+            <div class="list-group my-1">
+            <a href="#" class="list-group-item list-group-item-action active bg-info text-white">
+                Subjects
+            </a>
+            <a href="/my_solutions" class="list-group-item list-group-item-action mt-2  bg-white border">
+                All 
+            </a>
+            </div>
+            {% for sub in subjects %}
+            
+            <div class="list-group">
+                <a href="/my_solutions/?subject={{sub.id}}" class="list-group-item list-group-item-action my-1">
+                    {{sub.sub_name}}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-1 card shadow mx-auto" style="width: 80.5%;">
+            <h4 class="card-header text-center text-info border border-info mb-2 mx-2 mt-2">My Solutions</h4>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success mx-2" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <div class="mx-2">
+            {% if solutions %}
+            <table class="table">
+                <thead class="thead-light ">
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Points</th>
+                    <th scope="col">Received</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for solu in solutions %}
+                  <tr>
+                    <td>{{solu.que_ass_id.title}}</td>
+                    <td>{{solu.subject}}</td>
+                    <td>{{solu.que_ass_id.end_date}}</td>
+                    <td>{{solu.que_ass_id.total_points}}</td>
+                    {% if solu.marks %}
+                    <td>{{solu.marks}}</td>
+                    {% else %}
+                    <td>-</td>
+                    {% endif %}
+                    <td><a href= "{{solu.ans_url.url}}" class="btn btn-success" role="btn">View</a></td>
+                    {% if solu.done_status == 'In Time' %}
+                    <td class="text-success"><b>{{solu.done_status}}</b></td>
+                    {% else %}
+                    <td class="text-danger"><b>{{solu.done_status}}</b></td>
+                    {% endif %}
+
+                    {% if solu.id in solu_status %}
+                    <td class="text-success"><button type="button" class="btn btn-info px-4" disabled>Done</button></td>
+                    {% else %}
+                    <td class="text-success"><a role="button" class="btn btn-outline-secondary" href="/edit_my_solutions/?edit_sol_id={{solu.id}}">Edit</a>
+                        <a role="button" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')" href="/my_solutions/?del_ass_id={{solu.id}}">Delete</a>
+                    </td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-danger mx-2 my-2" role="alert">
+                This is no any solutions...
+            </div>
+            {% endif %}
+            </div>
+        </div>
+        
+        </div>
+    </div>
+
+        </div>
+
+    {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

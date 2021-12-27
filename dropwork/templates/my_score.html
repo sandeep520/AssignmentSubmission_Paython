@@ -1,0 +1,239 @@
+{% extends 'base2.html' %}
+{% load static %}
+<body>
+    {% block content %}
+    <div data-spy="scroll"  data-offset="0">
+        <div class="row mx-1">
+            <div class="card  mx-auto my-1 bg-light" style="width: 63%;">
+                <h4 class="card-header text-center text-info border border-info mt-1 mx-2">My score of all Assignments</h4>
+                <div class="card-body">
+                    <canvas id="myBarChart" height="55%" width="100%"></canvas>
+                    <div class="col-md-12 mt-3">
+                        <h5 class="text-center text-info">Total Received Marks : {{total_marks_report.1}} / {{total_marks_report.0}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card  mx-1 my-1 bg-light" style="width: 35%;">
+                <h4 class="card-header text-center text-info border border-info mt-1 mx-2">Reports</h4>
+                <div class="card-body">
+                    <canvas id="myPieChart" height="100%" width="100%"></canvas>
+                    <div class="col-md-12 mt-4">
+                        <h5 class="text-center text-info">Total Assignments : {{total_assigns}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mx-1">
+            <div class="mx-2 my-1" style="width: 20%;">
+              
+              <div class="list-group my-1">
+                <a href="#" class="list-group-item list-group-item-action active bg-info text-white">
+                    Subjects
+                </a>
+              </div>
+              {% for sub in subjects %}
+              
+              <div class="list-group">
+                  <a href="/my_score/?subject={{sub.id}}" class="list-group-item list-group-item-action my-1">
+                      {{sub.sub_name}}
+                  </a>
+              </div>
+              {% endfor %}
+            </div>
+        
+            {% if sub %}
+            <div class="card mx-auto my-1 bg-light" style="width:50%;">
+                <h4 class="card-header text-center text-info border border-info mt-1 mx-2">My score of {{sub.sub_name}} Assignments</h4>
+                <div class="card-body">
+                    <canvas id="mySubBarChart" height="40%" width="100%"></canvas>
+                    <div class="col-md-12 mt-3">
+                        <h5 class="text-center text-info">Total Received Marks : {{total_sub_marks_report.1}} / {{total_sub_marks_report.0}}</h5>
+                    </div>
+                </div>
+      
+            </div>
+            <div class="card mx-auto my-1 bg-light" style="width: 27%;">
+                <h4 class="card-header text-center text-info border border-info mt-1 mx-2">Report of {{sub.sub_name}} </h4>
+                <div class="card-body">
+                    <canvas id="mySubPieChart" height="78%" width="100%"></canvas>
+                    <div class="col-md-12 mt-3">
+                        <h5 class="text-center text-info">Total Assignments : {{total_sub_assigns}}</h5>
+                    </div>
+                </div>
+      
+            </div>
+            {% endif %}
+          </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+
+    <script>
+        var ctx = document.getElementById('myBarChart').getContext('2d');
+        var marks = JSON.parse("{{marks|escapejs}}");
+        var assigns = JSON.parse("{{assignments|escapejs}}");
+        var chart = new Chart(ctx, {
+        // The type of chart we want to create
+            type: 'bar',
+
+        // The data for our dataset
+            data: {
+                
+                labels: assigns,
+                
+                datasets: [{
+                label: 'Received Marks',
+                backgroundColor: ['rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)','rgb(144,12,63,0.3)','rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)','rgb(144,12,63,0.3)','rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)','rgb(144,12,63,0.3)'],
+                borderColor: ['rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)'],
+                data: marks,
+                borderWidth: 1
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                    beginAtZero: true
+                    }
+                }]
+            }
+        }
+        });
+
+        //Pie chart js
+        var ctx2 = document.getElementById('myPieChart').getContext('2d');
+        var reports = JSON.parse("{{reports|escapejs}}");
+        
+        var chart = new Chart(ctx2, {
+        // The type of chart we want to create
+            type: 'doughnut',
+
+        // The data for our dataset
+            data: {
+                
+                labels: ['Uploaded Assignments','Completed Assignments', 'Remaining Assignments'],
+                
+                datasets: [{
+                label: 'All Assignments Status',
+                backgroundColor: ['rgb(255,0,0,0.5)','rgb(0,153,0,0.5)','rgb(51,0,102,0.5)'],
+                borderColor: ['rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)'],
+                data: reports,
+                borderWidth: 1
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            
+                tooltips: {
+                enabled: true
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx2) => {
+    
+                        let sum = reports[0] + reports[1] + reports[2];
+                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                        return percentage;
+    
+    
+                    },
+                    color: '#fff',
+                }
+            }
+        }
+        });
+
+        // subject charts
+        var ctx = document.getElementById('mySubBarChart').getContext('2d');
+        var marks = JSON.parse("{{sub_marks|escapejs}}");
+        var assigns = JSON.parse("{{sub_assign|escapejs}}");
+        var chart = new Chart(ctx, {
+        // The type of chart we want to create
+            type: 'bar',
+
+        // The data for our dataset
+            data: {
+                
+                labels: assigns,
+                
+                datasets: [{
+                label: 'Received Marks',
+                backgroundColor: ['rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)','rgb(144,12,63,0.3)','rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)','rgb(144,12,63,0.3)','rgb(255,0,127,0.3)','rgb(0,153,0,0.3)','rgb(51,0,102,0.3)','rgb(255,0,0,0.3)','rgb(144,12,63,0.3)'],
+                borderColor: ['rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)'],
+                data: marks,
+                borderWidth: 1,
+                 
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                    beginAtZero: true
+                    }
+                }]
+                }
+        }
+        });
+
+        //sub pie cahrt
+        var ctx2 = document.getElementById('mySubPieChart').getContext('2d');
+        var reports = JSON.parse("{{sub_reports|escapejs}}");
+        
+        var chart = new Chart(ctx2, {
+        // The type of chart we want to create
+            type: 'doughnut',
+
+        // The data for our dataset
+            data: {
+                
+                labels: ['Uploaded Assignments','Completed Assignments', 'Remaining Assignments'],
+                
+                datasets: [{
+                label: 'All Assignments Status',
+                backgroundColor: ['rgb(255,0,0,0.5)','rgb(0,153,0,0.5)','rgb(51,0,102,0.5)'],
+                borderColor: ['rgb(0,102,102)','rgb(0,102,102)','rgb(0,102,102)'],
+                data: reports,
+                
+                borderWidth: 1
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            
+                tooltips: {
+                enabled: true,
+                
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx2) => {
+    
+                        let sum = reports[0] + reports[1] + reports[2];
+                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                        return percentage;
+    
+    
+                    },
+                    color: '#fff',
+                }
+            }
+        }
+        });
+
+    </script>
+    
+      {% endblock %}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
